@@ -101,7 +101,7 @@ class NavigationManager implements INavigationManager {
 			}
 
 			// This is the default app that will always be shown first
-			$entry['default'] = ($entry['app'] ?? false) === $this->defaultEntry;
+			$entry['default'] = ($entry['id'] ?? false) === $this->defaultEntry;
 			// Set order from user defined app order
 			$entry['order'] = (int)($this->customAppOrder[$id]['order'] ?? $entry['order'] ?? 100);
 		}
@@ -164,10 +164,10 @@ class NavigationManager implements INavigationManager {
 			unset($navEntry);
 		}
 
-		$activeApp = $this->getActiveEntry();
-		if ($activeApp !== null) {
+		$activeEntry = $this->getActiveEntry();
+		if ($activeEntry !== null) {
 			foreach ($list as $index => &$navEntry) {
-				if ($navEntry['id'] == $activeApp) {
+				if ($navEntry['id'] == $activeEntry) {
 					$navEntry['active'] = true;
 				} else {
 					$navEntry['active'] = false;
@@ -411,13 +411,13 @@ class NavigationManager implements INavigationManager {
 	}
 
 	public function get(string $id): array|null {
-		foreach ($this->getAll() as $entry) {
-			if ($entry['id'] === $id) {
-				return $entry;
-			}
+		$this->init();
+		foreach ($this->closureEntries as $c) {
+			$this->add($c());
 		}
+		$this->closureEntries = [];
 
-		return null;
+		return $this->entries[$id];
 	}
 
 	public function getDefaultEntryIdForUser(?IUser $user = null, bool $withFallbacks = true): string {
@@ -478,7 +478,7 @@ class NavigationManager implements INavigationManager {
 
 		foreach ($ids as $id) {
 			if (!in_array($id, $entryIds, true)) {
-				$this->logger->debug('Can not set unavailable entry as default entry', ['missing_entry' => $id]);
+				$this->logger->debug('Cannot set unavailable entry as default entry', ['missing_entry' => $id]);
 				throw new InvalidArgumentException('Entry not available');
 			}
 		}
