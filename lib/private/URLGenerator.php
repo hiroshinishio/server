@@ -304,8 +304,11 @@ class URLGenerator implements IURLGenerator {
 		if ($href === '') {
 			throw new \InvalidArgumentException('Default navigation entry is missing href: ' . $entryId);
 		}
+		if (str_starts_with($href, '/index.php/') && ($this->config->getSystemValueBool('htaccess.IgnoreFrontController', false) || getenv('front_controller_active') === 'true')) {
+			$href = substr($href, 10);
+		}
 
-		return $href;
+		return $this->getAbsoluteURL($href);
 	}
 
 	/**
