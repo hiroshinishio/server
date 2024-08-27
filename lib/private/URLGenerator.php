@@ -302,7 +302,7 @@ class URLGenerator implements IURLGenerator {
 		$entry = $this->getNavigationManager()->get($entryId);
 		$href = (string)$entry['href'];
 		if ($href === '') {
-			throw new \InvalidArgumentException('Missing href');
+			throw new \InvalidArgumentException('Default navigation entry is missing href: ' . $entryId);
 		}
 
 		return $href;
