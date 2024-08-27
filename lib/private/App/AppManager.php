@@ -843,10 +843,10 @@ class AppManager implements IAppManager {
 	public function getDefaultApps(): array {
 		$ids = $this->getNavigationManager()->getDefaultEntryIds();
 
-		return array_map(function (string $id) {
+		return array_values(array_unique(array_map(function (string $id) {
 			$entry = $this->getNavigationManager()->get($id);
 			return (string)$entry['app'];
-		}, $ids);
+		}, $ids)));
 	}
 
 	/**
