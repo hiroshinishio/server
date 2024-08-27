@@ -84,10 +84,9 @@ class AppManager implements IAppManager {
 	}
 
 	private function getNavigationManager(): INavigationManager {
-		if ($this->navigationManager !== null) {
-			return $this->navigationManager;
+		if ($this->navigationManager === null) {
+			$this->navigationManager = \OCP\Server::get(INavigationManager::class);
 		}
-		$this->navigationManager = \OCP\Server::get(INavigationManager::class);
 		return $this->navigationManager;
 	}
 
