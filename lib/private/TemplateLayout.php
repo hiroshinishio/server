@@ -100,8 +100,8 @@ class TemplateLayout extends \OC_Template {
 			$this->assign('logoUrl', $logoUrl);
 
 			// Set default entry name
-			$defaultEntryId = \OC::$server->getNavigationManager()->getDefaultEntryIdForUser();
-			$defaultEntry = \OC::$server->getNavigationManager()->get($defaultEntryId);
+			$defaultEntryId = \OCP\Server::get(INavigationManager::class)->getDefaultEntryIdForUser();
+			$defaultEntry = \OCP\Server::get(INavigationManager::class)->get($defaultEntryId);
 			$this->assign('defaultAppName', $defaultEntry['name']);
 
 			// Add navigation entry
