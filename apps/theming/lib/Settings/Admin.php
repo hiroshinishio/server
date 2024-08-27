@@ -5,6 +5,7 @@
  */
 namespace OCA\Theming\Settings;
 
+use OC\NavigationManager;
 use OCA\Theming\AppInfo\Application;
 use OCA\Theming\Controller\ThemingController;
 use OCA\Theming\ImageManager;
@@ -28,6 +29,7 @@ class Admin implements IDelegatedSettings {
 		private IInitialState $initialState,
 		private IURLGenerator $urlGenerator,
 		private ImageManager $imageManager,
+		private NavigationManager $navigationManager,
 	) {
 	}
 
@@ -70,7 +72,7 @@ class Admin implements IDelegatedSettings {
 			'docUrlIcons' => $this->urlGenerator->linkToDocs('admin-theming-icons'),
 			'canThemeIcons' => $this->imageManager->shouldReplaceIcons(),
 			'userThemingDisabled' => $this->themingDefaults->isUserThemingDisabled(),
-			'defaultApps' => array_filter(explode(',', $this->config->getSystemValueString('defaultapp', ''))),
+			'defaultApps' => $this->navigationManager->getDefaultEntryIds(),
 		]);
 
 		Util::addScript($this->appName, 'admin-theming');

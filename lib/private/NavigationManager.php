@@ -421,8 +421,8 @@ class NavigationManager implements INavigationManager {
 	}
 
 	public function getDefaultEntryIdForUser(?IUser $user = null, bool $withFallbacks = true): string {
-		$defaultEntryIds = explode(',', $this->config->getSystemValueString('defaultapp', ''));
-		$defaultEntryIds = array_filter($defaultEntryIds);
+		// Disable fallbacks here, as we need to override them with the user defaults if none are configured.
+		$defaultEntryIds = $this->getDefaultEntryIds(false);
 
 		$user ??= $this->userSession->getUser();
 
@@ -460,8 +460,17 @@ class NavigationManager implements INavigationManager {
 		return $withFallbacks ? 'files' : '';
 	}
 
-	public function getDefaultEntryIds(): array {
-		return explode(',', $this->config->getSystemValueString('defaultapp', 'dashboard,files'));
+	public function getDefaultEntryIds(bool $withFallbacks = true): array {
+		$storedIds = explode(',', $this->config->getSystemValueString('defaultapp', $withFallbacks ? 'dashboard,files' : ''));
+		$ids = [];
+		$entryIds = array_map(static fn (array $entry) => $entry['id'], $this->getAll());
+		foreach ($storedIds as $id) {
+			if (in_array($id, $entryIds, true)) {
+				$ids[] = $id;
+				break;
+			}
+		}
+		return array_filter($ids);
 	}
 
 	public function setDefaultEntryIds(array $ids): void {

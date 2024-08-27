@@ -105,10 +105,11 @@ interface INavigationManager {
 	/**
 	 * Get the global default entries with fallbacks
 	 *
+	 * @param bool $withFallbacks Include fallback values if no default entry was configured manually
 	 * @return string[] The default entries
 	 * @since 31.0.0
 	 */
-	public function getDefaultEntryIds(): array;
+	public function getDefaultEntryIds(bool $withFallbacks = true): array;
 
 	/**
 	 * Set the global default entries with fallbacks
