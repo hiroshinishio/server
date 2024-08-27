@@ -5,7 +5,6 @@
  */
 namespace OCA\Theming\Settings;
 
-use OC\NavigationManager;
 use OCA\Theming\AppInfo\Application;
 use OCA\Theming\Controller\ThemingController;
 use OCA\Theming\ImageManager;
@@ -15,6 +14,7 @@ use OCP\AppFramework\Http\TemplateResponse;
 use OCP\AppFramework\Services\IInitialState;
 use OCP\IConfig;
 use OCP\IL10N;
+use OCP\INavigationManager;
 use OCP\IURLGenerator;
 use OCP\Settings\IDelegatedSettings;
 use OCP\Util;
@@ -29,7 +29,7 @@ class Admin implements IDelegatedSettings {
 		private IInitialState $initialState,
 		private IURLGenerator $urlGenerator,
 		private ImageManager $imageManager,
-		private NavigationManager $navigationManager,
+		private INavigationManager $navigationManager,
 	) {
 	}
 
